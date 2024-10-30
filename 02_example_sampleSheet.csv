@@ -1,0 +1,2 @@
+patient,sample,lane,fastq_1,fastq_2
+ALSTDI_2184_1,ALSTDI_2184_1,L1,gs://nextflow-batch-input/platform/WGS/Broad_240829/FASTQ_CONVERTED/Sample_ALSTDI_2184_1/ALSTDI_2184_1_R1.fastq.gz,gs://nextflow-batch-input/platform/WGS/Broad_240829/FASTQ_CONVERTED/Sample_ALSTDI_2184_1/ALSTDI_2184_1_R2.fastq.gz
