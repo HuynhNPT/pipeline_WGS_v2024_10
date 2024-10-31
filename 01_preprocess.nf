@@ -1,7 +1,3 @@
-params.projectDir="gs://nextflow-batch-input/platform/WGS/Broad_240829/download_broad_8_29_2024"
-params.out_bucket="gs://nextflow-batch-input/platform/WGS/Broad_240829/FASTQ_CONVERTED"
-params.fastaDir="gs://nextflow-batch-input/_resources/genomeMapping/GATK/Homo_sapiens/GRCh38_full_analysis_set_plus_decoy_hla.fa"
-
 // Use this script to preprocess Broad's delivered CRAM files into FASTQs 
 // to feed into nf-core/sarek -ready pipeline
 // Script aims to do two things: 
