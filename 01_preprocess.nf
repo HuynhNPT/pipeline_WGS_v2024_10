@@ -6,7 +6,7 @@
 process CHECKSUM {
     container 'us-east1-docker.pkg.dev/compute-workspace/omics-docker-repo/rnaseq2'
     cpus 4
-    memory '16 GB'
+    memory '32 GB'
 
     input:
     tuple val(SAMPLE),
@@ -47,7 +47,9 @@ process CONVERT_TO_FASTQ {
     path FASTA_REF
 
     output:
-    path "*.fastq.gz"
+    val "${SAMPLE}"
+    path "${SAMPLE}_R1.fastq.gz"
+    path "${SAMPLE}_R2.fastq.gz"
 
     script:
     """
@@ -69,6 +71,29 @@ process CONVERT_TO_FASTQ {
                    -2 ${SAMPLE}_R2.fastq.gz \
                    ${SAMPLE}_sortedByName.bam
 
+    """
+}
+
+process CHECKSUM_FASTQ {
+    container 'us-east1-docker.pkg.dev/compute-workspace/omics-docker-repo/rnaseq2'
+    cpus 3
+    memory '24 GB'
+    disk 500.GB // disk option here overides google.batch.bootdisksize in config
+
+    publishDir "${params.out_bucket}/Sample_${SAMPLE}", mode: 'copy'
+
+    input:
+    val SAMPLE
+    path R1
+    path R2
+
+    output:
+    path "*.md5"
+
+    script:
+    """
+    md5sum ${R1} > ${R1}.md5
+    md5sum ${R2} > ${R2}.md5
     """
 }
 
@@ -95,4 +120,6 @@ workflow {
     input_ch.view()
     input_ref=file("${params.fastaDir}")
     CONVERT_TO_FASTQ(input_ch, input_ref)
+    // Add checksums for newly generated fastq files
+    CHECKSUM_FASTQ(CONVERT_TO_FASTQ.out)
 }
