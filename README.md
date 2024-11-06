@@ -52,4 +52,7 @@ ExpansionHunter <br>
 Annotation <br>
 Branch for BAM to FASTQ instead of CRAM to FASTQ
 
+<br>
 
+# CHANGE LOG: 
+November 2024: Change processes' requirements for some process in gcp.config. Edit run_sarek to push 10 samples through sarek at a time. For some reason, pushing 80 samples like what we did for year 2024 keep exiting out with weird termination errors. 
