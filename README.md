@@ -6,14 +6,15 @@ Pipeline uses BWA-MEM for alignment to hg38 as default, then evoke varient calli
 To run the pipeline:  <br>
 - Consult `00_make_sampleall.sh` to see how we could create `00_example_samples_all` text file, where we can point the preprocess pipeline to. The text file name `samples_all` is hard-coded in `01_run_preprocess.sh`<br>
 - Create `MMYY_PROJECT.yaml` based on `01_example.yaml` and modify accordingly. We will keep a log of this `MMYY_PROJECT.yaml` <br>
-- Modify and run `01_run_preprocess.sh` based on this yaml file <br>
-- After FASTQs are generated, make sampleSheet.csv that looks like `02_example_sampleSheet.csv`. We will keep this sampleSheet in the log as well. <br>
-- Finally, modify `outdir` in `02_run_sarek.sh` and initiate the pipeline on GCloud. You will not need the `local` profile unless you're debugging.  <br>
+- Run `01_run_preprocess.sh`. This is interactive and will ask the user whether we should proceed with found yaml file <br>
+- After FASTQs are generated, use `02_make_samplesheet.sh` to make sampleSheet.csv that looks like `02_example_sampleSheet.csv`. We will keep this sampleSheet in the log as well. <br>
+- Finally, modify `YEAR` in `02_run_sarek.sh` and `workDir` in `gcp.config` so that multiple nextflow tmp dirs don't run into each other. Initiate the pipeline on GCloud. You will not need the `local` profile unless you're debugging.  <br>
 
 ```
 ./00_make_sampleall.sh
 ./01_run_preprocess.sh
-./01_run_sarek.sh
+./02_make_samplesheet.sh
+./02_run_sarek.sh
 ```
 
 # Pipeline file structure:
@@ -55,4 +56,7 @@ Branch for BAM to FASTQ instead of CRAM to FASTQ
 <br>
 
 # CHANGE LOG: 
-November 2024: Change processes' requirements for some process in gcp.config. Edit run_sarek to push 10 samples through sarek at a time. For some reason, pushing 80 samples like what we did for year 2024 keep exiting out with weird termination errors. 
+#### November 2024: <br>
+- Change processes' requirements for some process in gcp.config. <br>
+- Edit run_sarek to push 15 samples through sarek at a time. For some reason, pushing 80 samples like what we did for year 2024 keep exiting out with weird termination errors. <br>
+- Edit gcp.config and nextflow.config for dynamic temporary working directories. So that pipelines being executed parallelly don't run into each other. <br>

@@ -1,5 +1,5 @@
 #!/bin/bash
-gsutil ls -r gs://nextflow-batch-input/platform/WGS/23* > tmp
+gsutil ls -r gs://nextflow-batch-input/platform/WGS/[PLACEHOLDERfx-21]* > tmp
 
 cat tmp | grep "cram$"  > cram
 cat tmp | grep "crai$"  > crai
