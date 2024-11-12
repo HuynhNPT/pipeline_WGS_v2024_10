@@ -49,6 +49,7 @@ This repository contains the following static components that you will not have 
 5. `02_run_sarak.sh`: script to evoke nf-core/sarek pipeline. Make sure you have `sampleSheet.csv` for the `--input` and that you also modify the `--outdir`. <br>
 
 # TODO:
+google bitsies are commented out in gcp.config. Would it still run without it? <br>
 ExpansionHunter <br>
 Annotation <br>
 Branch for BAM to FASTQ instead of CRAM to FASTQ
@@ -57,6 +58,7 @@ Branch for BAM to FASTQ instead of CRAM to FASTQ
 
 # CHANGE LOG: 
 #### November 2024: <br>
-- Change processes' requirements for some process in gcp.config. <br>
+- Rename nextflow.config to step01.config for the first step of this pipeline. For some reason (perhaps with the new nextflow update?), nextflow.config was automatically grabbed by SAREK and thus resulting in erros since there's no requirement for params.YEAR in sarek, but this param is needed in the first step of turning BAM and CRAM into FASTQ, which is supplied by the param yaml file. <br>
+- Change processes' requirements for some process in gcp.config, and implement dynamic resource assignment for disk size <br>
 - Edit run_sarek to push 15 samples through sarek at a time. For some reason, pushing 80 samples like what we did for year 2024 keep exiting out with weird termination errors. <br>
-- Edit gcp.config and nextflow.config for dynamic temporary working directories. So that pipelines being executed parallelly don't run into each other. <br>
+- Edit gcp.config and step01.config for dynamic temporary working directories. So that pipelines being executed parallelly don't run into each other. <br>
