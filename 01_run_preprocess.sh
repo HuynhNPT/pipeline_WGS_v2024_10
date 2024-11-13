@@ -24,6 +24,7 @@ else
         nextflow run 01_preprocess.nf \
             -with-report -with-dag \
             -profile cloud \
+            -c step01.config \
             -params-file ${YAML_FILE}
     else
         echo "Exiting the pipeline! Adieu!"
