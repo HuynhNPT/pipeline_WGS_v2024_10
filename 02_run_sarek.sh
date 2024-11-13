@@ -5,7 +5,7 @@ cat samplesheet.csv  | split -l 15 - subSheet_
 
 for ff in subSheet_*; do
     sed -i '1i patient,sample,lane,fastq_1,fastq_2' ${ff}
-    export PROJECT="Broad_y${YEAR}_${ff}"
+    export PROJECT="Broad_y${YEAR}_bam_${ff}"
     echo ${PROJECT}
 
     cp ${ff} ${ff}.csv

@@ -1,4 +1,3 @@
-YEAR       : "[PLACEHOLDERfx-2021]"
+YEAR       : "[PLACEHOLDERfx-2020b]"
 projectDir : "gs://nextflow-batch-input/platform/WGS"
-out_bucket : "gs://nextflow-batch-input/platform/WGS/[PLACEHOLDERfx-y2021]_Broad/FASTQ_CONVERTED"
-fastaDir   : "gs://nextflow-batch-input/_resources/genomeMapping/GATK/Homo_sapiens/GRCh38_full_analysis_set_plus_decoy_hla.fa"
+out_bucket : "gs://nextflow-batch-input/platform/WGS/[PLACEHOLDERfx-y2021]_Bam/FASTQ_CONVERTED"

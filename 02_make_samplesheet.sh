@@ -1,7 +1,7 @@
 #!/bin/bash
 
-gsutil ls -r gs://nextflow-batch-input/platform/WGS/[PLACEHOLDERfx-y2021]_Broad/FASTQ_CONVERTED/**/*R1.fastq.gz > r1
-gsutil ls -r gs://nextflow-batch-input/platform/WGS/[PLACEHOLDERfx-y2021]_Broad/FASTQ_CONVERTED/**/*R2.fastq.gz > r2
+gsutil ls -r gs://nextflow-batch-input/platform/WGS/[PLACEHOLDERfx-y2020]_Bam/FASTQ_CONVERTED/**/*R1.fastq.gz > r1
+gsutil ls -r gs://nextflow-batch-input/platform/WGS/[PLACEHOLDERfx-y2020]_Bam/FASTQ_CONVERTED/**/*R2.fastq.gz > r2
 cp r1 tmp
 cat tmp  | sed 's#.*Sample_##' | sed 's#/.*##' > patient
 rm lane; touch lane; 

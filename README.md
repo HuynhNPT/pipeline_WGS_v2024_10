@@ -1,6 +1,11 @@
 # pipeline_WGS_v2024_10
-Pipeline first converts cram or bam files to FASTQs, then execute the whole nf-core/sarek pipeline on generated fastq files. 
-Pipeline uses BWA-MEM for alignment to hg38 as default, then evoke varient calling with cnvkit, manta, deepvariant, haplotypecaller, and strelka
+Pipeline first converts cram or bam files to FASTQs, then execute the whole nf-core/sarek pipeline on generated fastq files. <br>
+Pipeline uses BWA-MEM for alignment to hg38 as default, then evoke varient calling with cnvkit, manta, deepvariant, haplotypecaller, and strelka <br>
+
+## BRANCHES: 
+By default, the `main` branch turns CRAM to FASTQs, then run SAREK on them. <br>
+The `BAM2FASTQ` branch turns BAM to FASTQs, then run SAREK on them. The major difference from the `main` branch lies in script `01_preprocess.nf`. <br>
+
 
 # Quick start: 
 To run the pipeline:  <br>
@@ -57,6 +62,8 @@ Branch for BAM to FASTQ instead of CRAM to FASTQ
 <br>
 
 # CHANGE LOG: 
+#### November 2024: <br>
+- Add BAM2FASTQ option to turn BAM files into FASTQs before running SAREK. <br> 
 #### November 2024: <br>
 - Rename nextflow.config to step01.config for the first step of this pipeline. For some reason (perhaps with the new nextflow update?), nextflow.config was automatically grabbed by SAREK and thus resulting in erros since there's no requirement for params.YEAR in sarek, but this param is needed in the first step of turning BAM and CRAM into FASTQ, which is supplied by the param yaml file. <br>
 - Change processes' requirements for some process in gcp.config, and implement dynamic resource assignment for disk size <br>

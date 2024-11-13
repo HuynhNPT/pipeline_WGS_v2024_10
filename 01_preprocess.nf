@@ -1,8 +1,8 @@
-// Use this script to preprocess Broad's delivered CRAM files into FASTQs 
+// Use this script to preprocess Broad's delivered BAM files into FASTQs 
 // to feed into nf-core/sarek -ready pipeline
 // Script aims to do two things: 
-// 1. Compare checksum from Broad to storage checksum 
-// 2. Use of samtools to reverse CRAM into FASTQ
+// 1. Compare checksum from Broad to NEWLY-GENERATED checksum 
+// 2. Use of samtools to reverse BAM into FASTQ
 process CHECKSUM {
     container 'us-east1-docker.pkg.dev/compute-workspace/omics-docker-repo/rnaseq2'
     cpus 4
@@ -10,8 +10,7 @@ process CHECKSUM {
 
     input:
     tuple val(SAMPLE),
-    path(CRAM_FILE),
-    path(CRAI_FILE),
+    path(BAM_FILE),
     path (MD5_FILE)
 
     output:
@@ -20,9 +19,9 @@ process CHECKSUM {
 
     shell:
     '''
-    md5sum !{CRAM_FILE}  | awk '{print $1}' > file1
-    cp !{MD5_FILE} file2
-    echo "" >> file2
+    md5sum !{BAM_FILE}  | awk '{print $1}' > file1
+    cat !{MD5_FILE} | awk '{print $1}' > file2
+    
     if cmp --silent file1 file2
     then
         is_faithful=true
@@ -43,8 +42,7 @@ process CONVERT_TO_FASTQ {
     publishDir "${params.out_bucket}/Sample_${SAMPLE}", mode: 'copy'
 
     input:
-    tuple val(SAMPLE), path(CRAM_FILE), path(CRAI_FILE), path(MD5_FILE)
-    path FASTA_REF
+    tuple val(SAMPLE), path(BAM_FILE), path(MD5_FILE)
 
     output:
     val "${SAMPLE}"
@@ -53,20 +51,14 @@ process CONVERT_TO_FASTQ {
 
     script:
     """
-    samtools view -b -T ${FASTA_REF} \
-                  -@ ${task.cpus}-2 \
-                  -o ${SAMPLE}_byCoord.bam \
-                  ${CRAM_FILE}
-
     samtools sort -n \
                   -@ ${task.cpus}-2 \
                   -T ${SAMPLE}tmp \
                   -O bam \
                   -o ${SAMPLE}_sortedByName.bam \
-                  ${SAMPLE}_byCoord.bam
+                  ${BAM_FILE}
                   
     samtools fastq -@ ${task.cpus}-2 \
-                   --reference=${FASTA_REF} \
                    -1 ${SAMPLE}_R1.fastq.gz \
                    -2 ${SAMPLE}_R2.fastq.gz \
                    ${SAMPLE}_sortedByName.bam
@@ -101,8 +93,7 @@ workflow {
     reads_ch=Channel.fromPath("samples_all").splitCsv(header: true)
     | map {
         row -> [row.'sample_name', // tuple
-                file("${params.projectDir}/${row.cram}"), 
-                file("${params.projectDir}/${row.crai}"), 
+                file("${params.projectDir}/${row.bam}"),
                 file("${params.projectDir}/${row.checksum}")] 
     }
     CHECKSUM(reads_ch)
@@ -118,8 +109,8 @@ workflow {
     // Submit samples with integrity-checked CRAM files to convert to fastq
     input_ch = result.passed.map{sample, is_faithful -> sample}.join(reads_ch, remainder: false )
     input_ch.view()
-    input_ref=file("${params.fastaDir}")
-    CONVERT_TO_FASTQ(input_ch, input_ref)
+   
+    CONVERT_TO_FASTQ(input_ch)
     // Add checksums for newly generated fastq files
     CHECKSUM_FASTQ(CONVERT_TO_FASTQ.out)
 }
