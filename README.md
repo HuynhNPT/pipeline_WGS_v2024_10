@@ -3,7 +3,7 @@ Pipeline first converts cram or bam files to FASTQs, then execute the whole nf-c
 Pipeline uses BWA-MEM for alignment to hg38 as default, then evoke varient calling with cnvkit, manta, deepvariant, haplotypecaller, and strelka
 
 # Quick start: 
-To run the pipeline:  <br>
+## To run the pipeline:  <br>
 - Consult `00_make_sampleall.sh` to see how we could create `00_example_samples_all` text file, where we can point the preprocess pipeline to. The text file name `samples_all` is hard-coded in `01_run_preprocess.sh`<br>
 - Create `MMYY_PROJECT.yaml` based on `01_example.yaml` and modify accordingly. We will keep a log of this `MMYY_PROJECT.yaml` <br>
 - Run `01_run_preprocess.sh`. This is interactive and will ask the user whether we should proceed with found yaml file <br>
@@ -15,6 +15,11 @@ To run the pipeline:  <br>
 ./01_run_preprocess.sh
 ./02_make_samplesheet.sh
 ./02_run_sarek.sh
+```
+
+## To archive after pipeline finishes:  <br>
+```
+for ss in dag.html report.html samples_all samplesheet.csv _Broad.yaml subSheet*csv; do  cp $ss /efs/02_nextflow/pipeline_wgs_preprocessing_v2024_10/LOGS/CRAM/[PATH/TO/YEAR/FOLDER]; done
 ```
 
 # Pipeline file structure:
