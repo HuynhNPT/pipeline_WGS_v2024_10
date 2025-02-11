@@ -56,7 +56,10 @@ Branch for BAM to FASTQ instead of CRAM to FASTQ
 
 <br>
 
-# CHANGE LOG: 
+# CHANGE LOG: <br>
+#### January 2025: <br>
+- Rewrite `02_make_samplesheet.sh` to be based on specific samples that are coming from `samples_all` <br>
+- Edit `02_run_sarek.sh` to account for incidences where `subSheet_aa` project tag already exists in `nextflow-batch-output` and we would have to rename it to avoid duplication/overwrites. 
 #### November 2024: <br>
 - Rename nextflow.config to step01.config for the first step of this pipeline. For some reason (perhaps with the new nextflow update?), nextflow.config was automatically grabbed by SAREK and thus resulting in erros since there's no requirement for params.YEAR in sarek, but this param is needed in the first step of turning BAM and CRAM into FASTQ, which is supplied by the param yaml file. <br>
 - Change processes' requirements for some process in gcp.config, and implement dynamic resource assignment for disk size <br>
