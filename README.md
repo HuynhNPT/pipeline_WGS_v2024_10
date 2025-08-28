@@ -62,6 +62,8 @@ Branch for BAM to FASTQ instead of CRAM to FASTQ
 <br>
 
 # CHANGE LOG: <br>
+#### August 2025: <br>
+- Rewrite `00_make_sampleall.sh` to automatically grab samples from `transfer_data.txt` sheet from download_sheets.
 #### January 2025: <br>
 - Rewrite `02_make_samplesheet.sh` to be based on specific samples that are coming from `samples_all` <br>
 - Edit `02_run_sarek.sh` to account for incidences where `subSheet_aa` project tag already exists in `nextflow-batch-output` and we would have to rename it to avoid duplication/overwrites. 
