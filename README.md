@@ -62,6 +62,8 @@ Branch for BAM to FASTQ instead of CRAM to FASTQ
 <br>
 
 # CHANGE LOG: <br>
+#### February 2026: <br>
+- Add `02_rerun_sarek.sh` to rerun specific subSheets that did not go through the first time. 
 #### August 2025: <br>
 - Rewrite `00_make_sampleall.sh` to automatically grab samples from `transfer_data.txt` sheet from download_sheets.
 #### January 2025: <br>
