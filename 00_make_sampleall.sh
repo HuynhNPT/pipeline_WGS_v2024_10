@@ -12,7 +12,7 @@ while read line; do
     cat sample_list1 | sed 's/$/\.cram\.md5sum/'  | sed "s#^#${newDir}/${oldDir}/#" > md5_$newDir
     cp sample_list1 sample_list_$newDir
     rm sample_list1
-done < ../../00_download_sheets/y2025/transfer_data2.txt
+done < ../../00_download_sheets/y2026/transfer_data.txt
 
 cat sample_list_* > sample_list
 cat cram_* > cram

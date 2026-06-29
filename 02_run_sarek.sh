@@ -1,19 +1,20 @@
 #!/bin/bash
-export YEAR=[PLACEHOLDERfx-2021]
-# export YEAR=2024
-cat samplesheet.csv  | split -l 15  - subSheet_
+export YEAR=[PLACEHOLDERFX-260427C]
+# export YEAR=260427C
+
+cat tmp.csv  | split -l 15  - subSheet_
 
 for ff in subSheet_*; do
     sed -i '1i patient,sample,lane,fastq_1,fastq_2' ${ff}
 
-    export PROJECT="Broad_y${YEAR}_${ff}"
+    export PROJECT="Broad_nr${YEAR}_${ff}"
     
     # Safeguard so that old PROJECT is not overwritten
     until ! gsutil ls gs://nextflow-batch-output/WGS/${PROJECT} &>/dev/null
     do
         echo "Detected conflicts in PROJECT name. Renaming..."
         RANDOM_TAG=$(openssl rand -hex 6)
-        PROJECT="Broad_y${YEAR}_${RANDOM_TAG}"
+        PROJECT="Broad_nr${YEAR}_${RANDOM_TAG}"
     done
     
     echo ${PROJECT}
@@ -38,7 +39,7 @@ for ff in subSheet_*; do
     fi
 
     # Rename subSheet to reflect new project name if new tag was added because of conflict
-    if [ "$PROJECT" == "Broad_y${YEAR}_${ff}" ]
+    if [ "$PROJECT" == "Broad_nr${YEAR}_${ff}" ]
     then
         echo ""
     else

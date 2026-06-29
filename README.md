@@ -62,6 +62,9 @@ Branch for BAM to FASTQ instead of CRAM to FASTQ
 <br>
 
 # CHANGE LOG: <br>
+#### April 2026: <br>
+- Change year tag from `y20XX` to `nrYYMMDD` for specificity 
+- Fiddling with how many samples can be run at a time. Reduce batch size submission in `gcp.config`, hoping to not have to split a batch into multiple runs. 
 #### February 2026: <br>
 - Add `02_rerun_sarek.sh` to rerun specific subSheets that did not go through the first time. 
 #### August 2025: <br>
