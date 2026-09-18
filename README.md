@@ -62,6 +62,12 @@ Branch for BAM to FASTQ instead of CRAM to FASTQ
 <br>
 
 # CHANGE LOG: <br>
+#### August 2026: <br>
+- Reduce the number of samples per sarek run to 8. Seems like a good number now where all runs seem to work without failing for no reason. 
+- Edit `gcp.config` for submit rate and constraint on the number of jobs run at a time. A run of 8 samples should now finish in about 16 hours. 
+- Add `nf-plugins-patched` to try and rerun sarek if the GCloud API was having issues. 
+- Due to authentication issues, all `gsutil` commands are changed to `gcloud storage`. Add a line of `gcloud auth login` to make `gcloud storage ls` fail if there is truly not a directory there already. Otherwise, gcloud storage would throw an error because we are not authenticated yet. 
+- TODO: Should build in a check before running FASTQ converts to make sure sample names were not duplicated (?)
 #### April 2026: <br>
 - Change year tag from `y20XX` to `nrYYMMDD` for specificity 
 - Fiddling with how many samples can be run at a time. Reduce batch size submission in `gcp.config`, hoping to not have to split a batch into multiple runs. 

@@ -1,8 +1,9 @@
 #!/bin/bash
 export YEAR=[PLACEHOLDERFX-260427C]
 # export YEAR=260427C
+export NXF_PLUGINS_DIR=/efs/02_nextflow/WGS/01_SAREK/nf-plugins-patched
 
-cat tmp.csv  | split -l 15  - subSheet_
+cat samplesheet.csv  | split -l 8  - subSheet_
 
 for ff in subSheet_*; do
     sed -i '1i patient,sample,lane,fastq_1,fastq_2' ${ff}
@@ -10,7 +11,9 @@ for ff in subSheet_*; do
     export PROJECT="Broad_nr${YEAR}_${ff}"
     
     # Safeguard so that old PROJECT is not overwritten
-    until ! gsutil ls gs://nextflow-batch-output/WGS/${PROJECT} &>/dev/null
+    # Requires gcloud to be aut first. Otheriwse OVERWRITE will HAPPPEN
+    gcloud auth login
+    until ! gcloud storage ls gs://nextflow-batch-output/WGS/${PROJECT} &>/dev/null
     do
         echo "Detected conflicts in PROJECT name. Renaming..."
         RANDOM_TAG=$(openssl rand -hex 6)
@@ -18,6 +21,8 @@ for ff in subSheet_*; do
     done
     
     echo ${PROJECT}
+    echo ${PROJECT} >> tmp_log
+    echo $(date) >> tmp_log
     cp ${ff} ${ff}.csv
     nextflow run nf-core/sarek \
                 -r 3.4.4 \
@@ -33,9 +38,9 @@ for ff in subSheet_*; do
     
     # A log of whether this subSheet run was successful or not
     if [ $? -eq 0 ]; then
-        echo "Finished processing ${PROJECT}" >> tmp_log
+        echo "Finished processing ${PROJECT} at $(date)" >> tmp_log
     else 
-        echo "${PROJECT} error out with exit status $?" >> tmp_log
+        echo "${PROJECT} error out with exit status $? at $(date)" >> tmp_log
     fi
 
     # Rename subSheet to reflect new project name if new tag was added because of conflict

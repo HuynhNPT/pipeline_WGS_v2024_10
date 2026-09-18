@@ -6,7 +6,7 @@ while read line; do
     export newDir=$(echo $line | awk '{print $2}')
     export oldDir=$(echo $line | awk '{print $1}')
     export projectDir="gs://nextflow-batch-input/platform/WGS/${newDir}/${oldDir}/"
-    gsutil ls "${projectDir}"*cram | sed 's#.*/##' | sed 's/\.cram//' > sample_list1
+    gcloud storage ls "${projectDir}"*cram | sed 's#.*/##' | sed 's/\.cram//' > sample_list1
     cat sample_list1 | sed 's/$/\.cram/' | sed "s#^#${newDir}/${oldDir}/#" > cram_$newDir
     cat sample_list1 | sed 's/$/\.cram\.crai/' | sed "s#^#${newDir}/${oldDir}/#" > crai_$newDir
     cat sample_list1 | sed 's/$/\.cram\.md5sum/'  | sed "s#^#${newDir}/${oldDir}/#" > md5_$newDir

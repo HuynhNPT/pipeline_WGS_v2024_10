@@ -1,7 +1,7 @@
 #!/bin/bash
 
-gsutil ls -r gs://nextflow-batch-input/platform/WGS/[PLACEHOLDERfx-y2021]_Broad/FASTQ_CONVERTED/**/*R1.fastq.gz > r1
-gsutil ls -r gs://nextflow-batch-input/platform/WGS/[PLACEHOLDERfx-y2021]_Broad/FASTQ_CONVERTED/**/*R2.fastq.gz > r2
+gcloud storage ls -r gs://nextflow-batch-input/platform/WGS/y2026_Broad/FASTQ_CONVERTED/**/*R1.fastq.gz > r1
+gcloud storage ls -r gs://nextflow-batch-input/platform/WGS/y2026_Broad/FASTQ_CONVERTED/**/*R2.fastq.gz > r2
 cat samples_all | awk -F ',' '{print $1}' | tail -n+2 > patient
 
 rm lane; touch lane; 
